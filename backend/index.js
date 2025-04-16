@@ -1,43 +1,57 @@
-import express from 'express' 
-import dotenv from 'dotenv'
-import mongoose from 'mongoose'
-import cors from 'cors'
-import cookieParser from 'cookie-parser'
-import tourRouter from './routes/tours.js'
+import express from "express";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
-dotenv.config()
+// Import routes
+import tourRoute from "./routes/tours.js";
+import userRoute from "./routes/users.js";
+import authRoute from "./routes/auth.js";
+import reviewRoute from "./routes/reviews.js";
+import bookingRoute from "./routes/bookings.js";
 
-// Set Mongoose config
+// Config
+dotenv.config();
+const app = express();
+const port = process.env.PORT || 8000;
 
-mongoose.set('strictQuery', false)
+// CORS options
+const corsOptions = {
+  origin: true,
+  credentials: true,
+};
+
+// MongoDB connection
+mongoose.set("strictQuery", false);
 const connect = async () => {
-    try {
-        await mongoose.connect(process.env.DATABASE_URL)
-        useNewUrlParser: true;
-        useUnifiedTopolopy: true;
-        console.log('MongoDB database connected')
-    } catch (err) {
-        console.log(err);
-        console.log("MongoDB connection failed")
-    }
-}
+  try {
+    await mongoose.connect(process.env.DATABASE_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("✅ MongoDB connected");
+  } catch (error) {
+    console.error("❌ MongoDB connection failed:");
+    console.error(error.message);
+    process.exit(1); // Exit the app if DB connection fails
+  }
+};
 
-const app = express()
-const port = process.env.PORT || 8000
+// Middlewares
+app.use(express.json());
+app.use(cors(corsOptions));
+app.use(cookieParser());
 
-// Middleware
-app.use(express.json())
-app.use(cors())
-app.use(cookieParser())
-app.use('/tours', tourRouter)
+// API Routes
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/tours", tourRoute);
+app.use("/api/v1/users", userRoute);
+app.use("/api/v1/review", reviewRoute);
+app.use("/api/v1/booking", bookingRoute);
 
-// Test route
-app.get("/", (req, res) => {
-    res.send("API is working");
-});
-
-// Start server and connect to DB
+// Start server
 app.listen(port, () => {
-    connect();
-    console.log('Server listening on port', port)
+  connect(); // Connect to MongoDB
+  console.log(`🚀 Server running on port ${port}`);
 });
