@@ -33,6 +33,8 @@ const ToursListPage = () => {
   }
 
   return (
+    <>
+    <Header />
     <Grid container spacing={4} padding={4}>
       {tours.map((tour) => (
         <Grid item xs={12} sm={6} md={3} key={tour._id}>
@@ -46,14 +48,13 @@ const ToursListPage = () => {
               <Typography variant="body2" color="text.secondary">
                 ${tour.price}
               </Typography>
-              <Button onClick={() => history(`/admin/tour/${tour._id}`)} variant="outlined">
-                View Details
-              </Button>
             </CardContent>
           </Card>
         </Grid>
       ))}
     </Grid>
+    <Footer/>
+    </>
   );
 };
 

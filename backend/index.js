@@ -12,6 +12,7 @@ import reviewRoute from "./routes/reviews.js";
 import bookingRoute from "./routes/bookings.js";
 import adminRoutes from "./routes/admin.js";
 
+
 // Config
 dotenv.config();
 const app = express();
@@ -19,8 +20,8 @@ const port = process.env.PORT || 8000;
 
 // CORS options
 const corsOptions = {
-  origin: true,
-  credentials: true,
+  origin: "http://localhost:3000", // Allow specific origin
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 };
 
 // MongoDB connection
@@ -41,7 +42,7 @@ const connect = async () => {
 
 // Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 // API Routes
@@ -50,7 +51,18 @@ app.use("/api/v1/tours", tourRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/review", reviewRoute);
 app.use("/api/v1/booking", bookingRoute);
-app.use("/api/v1/admin",adminRoutes)
+app.use("/api/v1/admin", adminRoutes);
+
+// Error Handling for Undefined Routes
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Route not found" });
+});
+app.use((req, res, next) => {
+  res.on("finish", () => {
+    console.log("CORS Headers:", res.getHeaders());
+  });
+  next();
+});
 
 // Start server
 app.listen(port, () => {
