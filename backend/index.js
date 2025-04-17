@@ -10,6 +10,7 @@ import userRoute from "./routes/users.js";
 import authRoute from "./routes/auth.js";
 import reviewRoute from "./routes/reviews.js";
 import bookingRoute from "./routes/bookings.js";
+import adminRoutes from "./routes/admin.js";
 
 // Config
 dotenv.config();
@@ -40,7 +41,7 @@ const connect = async () => {
 
 // Middlewares
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(cookieParser());
 
 // API Routes
@@ -49,6 +50,7 @@ app.use("/api/v1/tours", tourRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/review", reviewRoute);
 app.use("/api/v1/booking", bookingRoute);
+app.use("/api/v1/admin",adminRoutes)
 
 // Start server
 app.listen(port, () => {
