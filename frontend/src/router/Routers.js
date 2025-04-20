@@ -12,6 +12,7 @@ import UsersPage from '../admin/Users'
 import BookingPage from '../admin/Booking'
 import ReviewsPage from '../admin/Review'
 import Tour from '../admin/Tours'
+import AddTourPage from "../admin/AddTours"
 
 const Routers = () => {
    return (
@@ -29,6 +30,7 @@ const Routers = () => {
          <Route path='/admin/bookings' element={<BookingPage/>}/>
          <Route path='/admin/tours' element={<Tour/>}/>
          <Route path='/admin/reviews' element={<ReviewsPage/>}/>
+         <Route path='/admin/addTour' element={<AddTourPage/>}/>
       </Routes>
    )
 }

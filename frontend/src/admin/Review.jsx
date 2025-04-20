@@ -1,8 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardContent, Typography } from '@mui/material';
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  CircularProgress,
+  Tooltip,
+} from '@mui/material';
 import { BASE_URL } from '../utils/config';
 import Header from './Header';
 import Footer from './Footer';
+import StarIcon from '@mui/icons-material/Star';
+
 const ReviewsPage = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,41 +38,69 @@ const ReviewsPage = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
+        <CircularProgress size={60} sx={{ color: '#0072ff' }} />
+      </Box>
+    );
   }
 
   return (
     <div>
-        <Header/>
-      <Grid container spacing={4} padding={4}>
-        {reviews.length > 0 ? (
-          reviews.map((review, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card style={{ backgroundColor: '#f3f3f3' }}>
-                <CardContent>
-                  <Typography variant="h5" component="div" gutterBottom>
-                    {review.username}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Tour: {review.productId ? review.productId.tourName : 'Unknown Tour'}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Rating: {review.rating} / 5
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Review: {review.reviewText}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))
-        ) : (
-          <Typography variant="h6" align="center" color="textSecondary">
-            No reviews available.
-          </Typography>
-        )}
-      </Grid>
-      <Footer/>
+      {/* <Header /> */}
+      <Box sx={{ padding: '4rem 2rem', backgroundColor: '#f9f9f9' }}>
+        <Typography variant="h4" align="center" sx={{ mb: 4, fontWeight: 'bold', color: '#333' }}>
+          Customer Reviews
+        </Typography>
+
+        <TableContainer component={Paper} sx={{ boxShadow: 6, borderRadius: 2 }}>
+          <Table sx={{ minWidth: 650 }} aria-label="reviews table">
+            <TableHead sx={{ backgroundColor: '#0072ff' }}>
+              <TableRow>
+                <TableCell align="center" sx={{ fontWeight: 'bold', color: '#fff' }}>Username</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 'bold', color: '#fff' }}>Tour</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 'bold', color: '#fff' }}>Rating</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 'bold', color: '#fff' }}>Review</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reviews.length > 0 ? (
+                reviews.map((review, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#fff', // Striped rows
+                      '&:hover': { backgroundColor: '#f0f0f0' }, // Hover effect
+                    }}
+                  >
+                    <TableCell align="center">{review.username}</TableCell>
+                    <TableCell align="center">{review.productId ? review.productId.tourName : 'Unknown Tour'}</TableCell>
+                    <TableCell align="center">
+                      <Tooltip title={`${review.rating} stars`} arrow>
+                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                          {[...Array(5)].map((_, index) => (
+                            <StarIcon key={index} sx={{ color: index < review.rating ? '#FFD700' : '#ddd', fontSize: 20 }} />
+                          ))}
+                        </Box>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell align="center">{review.reviewText}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} align="center">
+                    <Typography variant="h6" color="textSecondary">
+                      No reviews available.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+      {/* <Footer sx={{ position: 'relative', bottom: 0, width: '100%' }} /> */}
     </div>
   );
 };

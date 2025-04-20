@@ -8,9 +8,10 @@ const Header = () => {
   return (
     <AppBar
       position="fixed"
-      style={{ top: 0, width: '100%', backgroundColor: '#1976d2', zIndex: 1000 }}
+      style={{ top: 0, width: '100%', backgroundColor: '#1976d2', zIndex: 1000, height: '40px',
+       }}
     >
-      <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Toolbar style={{ display: 'flex', justifyContent: 'space-between', marginTop:'-10px'}}>
         <Typography variant="h6">Travel Dashboard</Typography>
         <div>
           <Button color="inherit" onClick={() => navigate('/admin')}>Dashboard</Button>
